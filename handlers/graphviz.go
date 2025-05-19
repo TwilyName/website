@@ -11,11 +11,11 @@ import (
 	"strings"
 	"time"
 
-	"github.com/Twi1ightSpark1e/website/config"
-	handlerrors "github.com/Twi1ightSpark1e/website/handlers/errors"
-	"github.com/Twi1ightSpark1e/website/handlers/util"
-	"github.com/Twi1ightSpark1e/website/log"
-	tpl "github.com/Twi1ightSpark1e/website/template"
+	"github.com/TwilyName/website/config"
+	handlerrors "github.com/TwilyName/website/handlers/errors"
+	"github.com/TwilyName/website/handlers/util"
+	"github.com/TwilyName/website/log"
+	tpl "github.com/TwilyName/website/template"
 	"github.com/goccy/go-graphviz"
 	"github.com/goccy/go-graphviz/cgraph"
 )

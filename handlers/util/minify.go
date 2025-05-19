@@ -3,7 +3,7 @@ package util
 import (
 	"io"
 
-	tpl "github.com/Twi1ightSpark1e/website/template"
+	tpl "github.com/TwilyName/website/template"
 
 	"github.com/tdewolff/minify/v2"
 	"github.com/tdewolff/minify/v2/html"

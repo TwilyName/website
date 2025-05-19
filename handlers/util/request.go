@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/Twi1ightSpark1e/website/config"
+	"github.com/TwilyName/website/config"
 )
 
 func IsWhitelistedProxy(req *http.Request) bool {

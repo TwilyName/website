@@ -6,11 +6,11 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/Twi1ightSpark1e/website/config"
+	"github.com/TwilyName/website/config"
 	"github.com/flytam/filenamify"
 )
 
-func (h *handler) recvFile(w http.ResponseWriter, r * http.Request) (bool, error) {
+func (h *handler) recvFile(w http.ResponseWriter, r *http.Request) (bool, error) {
 	if r.Method != http.MethodPost {
 		return false, nil
 	}

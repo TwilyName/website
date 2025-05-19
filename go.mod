@@ -1,4 +1,4 @@
-module github.com/Twi1ightSpark1e/website
+module github.com/TwilyName/website
 
 go 1.23.0
 

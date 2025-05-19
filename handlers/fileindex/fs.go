@@ -12,7 +12,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/Twi1ightSpark1e/website/config"
+	"github.com/TwilyName/website/config"
 	"github.com/shurcooL/httpfs/filter"
 	"github.com/shurcooL/httpfs/vfsutil"
 )
@@ -101,10 +101,10 @@ func (h *handler) getDirContent(
 }
 
 type fileEntry struct {
-	Name  string
-	Size  string
-	Date  string
-	IsDir bool
+	Name    string
+	Size    string
+	Date    string
+	IsDir   bool
 	RawSize int64
 	RawDate time.Time
 }
@@ -143,12 +143,12 @@ func (h *handler) prepareFileList(path string, addr net.IP, search searchParams,
 		}
 
 		result = append(result, fileEntry{
-			IsDir: fi.IsDir(),
-			Name:  entryName,
+			IsDir:   fi.IsDir(),
+			Name:    entryName,
 			RawSize: fi.Size(),
 			RawDate: fi.ModTime().UTC(),
-			Date:  fi.ModTime().UTC().Format("2006-01-02 15:04:05"),
-			Size:  byteCountIEC(fi.Size()),
+			Date:    fi.ModTime().UTC().Format("2006-01-02 15:04:05"),
+			Size:    byteCountIEC(fi.Size()),
 		})
 
 		return err

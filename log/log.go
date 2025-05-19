@@ -6,12 +6,12 @@ import (
 	"os/signal"
 	"syscall"
 
-	"github.com/Twi1ightSpark1e/website/config"
+	"github.com/TwilyName/website/config"
 )
 
 type Channels struct {
 	Access *log.Logger
-	Error *log.Logger
+	Error  *log.Logger
 	Stdout *log.Logger
 	Stderr *log.Logger
 }
@@ -27,14 +27,14 @@ func Initialize() {
 	var err error
 
 	if config.Get().Log.Access != "" {
-		logout, err = os.OpenFile(config.Get().Log.Access, os.O_WRONLY | os.O_CREATE | os.O_APPEND, 0660)
+		logout, err = os.OpenFile(config.Get().Log.Access, os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0660)
 		if err != nil {
 			log.Fatalf("cannot open file: %v", err)
 		}
 	}
 
 	if config.Get().Log.Error != "" {
-		logerr, err = os.OpenFile(config.Get().Log.Error, os.O_WRONLY | os.O_CREATE | os.O_APPEND, 0660)
+		logerr, err = os.OpenFile(config.Get().Log.Error, os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0660)
 		if err != nil {
 			log.Fatalf("cannot open file: %v", err)
 		}
@@ -50,7 +50,7 @@ func InitializeSignalHandler() {
 
 	go func() {
 		for {
-			_ = <- sighup
+			_ = <-sighup
 			Stdout().Print("SIGHUP received, reopening log files")
 			Initialize()
 		}
@@ -58,7 +58,7 @@ func InitializeSignalHandler() {
 }
 
 func Access() *log.Logger {
-	return logger.Access;
+	return logger.Access
 }
 func Error() *log.Logger {
 	return logger.Error

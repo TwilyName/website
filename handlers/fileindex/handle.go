@@ -4,20 +4,20 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/Twi1ightSpark1e/website/config"
-	"github.com/Twi1ightSpark1e/website/handlers/errors"
-	"github.com/Twi1ightSpark1e/website/handlers/markdown"
-	"github.com/Twi1ightSpark1e/website/handlers/util"
-	"github.com/Twi1ightSpark1e/website/log"
-	tpl "github.com/Twi1ightSpark1e/website/template"
+	"github.com/TwilyName/website/config"
+	"github.com/TwilyName/website/handlers/errors"
+	"github.com/TwilyName/website/handlers/markdown"
+	"github.com/TwilyName/website/handlers/util"
+	"github.com/TwilyName/website/log"
+	tpl "github.com/TwilyName/website/template"
 )
 
 type uploader func(w http.ResponseWriter, r *http.Request, params searchParams) (bool, error)
 
 type handler struct {
-	root http.FileSystem
-	path string
-	endpoint config.FileindexHandlerEndpointStruct
+	root      http.FileSystem
+	path      string
+	endpoint  config.FileindexHandlerEndpointStruct
 	uploaders map[string]uploader
 }
 
@@ -29,9 +29,9 @@ func CreateHandler(
 	tpl.AssertExists("fileindex")
 
 	h := &handler{root, path, endpoint, map[string]uploader{}}
-	h.uploaders = map[string]uploader {
+	h.uploaders = map[string]uploader{
 		"tar": h.uploadTar,
-		"gz": h.uploadGz,
+		"gz":  h.uploadGz,
 		"zst": h.uploadZst,
 	}
 
@@ -39,7 +39,7 @@ func CreateHandler(
 }
 
 type preservedParam struct {
-	Key string
+	Key   string
 	Value string
 }
 
@@ -50,9 +50,9 @@ type page struct {
 	sortParams
 
 	PreservedParams []preservedParam
-	URL string
-	AllowUpload bool
-	List []fileEntry
+	URL             string
+	AllowUpload     bool
+	List            []fileEntry
 }
 
 func (h *handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
@@ -85,19 +85,19 @@ func (h *handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		sort = string(SortByDate)
 	}
 
-	pageData := page {
-		BreadcrumbData: util.PrepareBreadcrumb(r),
-		AllowUpload: allowUpload,
-		URL: r.URL.Path,
+	pageData := page{
+		BreadcrumbData:  util.PrepareBreadcrumb(r),
+		AllowUpload:     allowUpload,
+		URL:             r.URL.Path,
 		PreservedParams: h.preserveGetParams(r),
 		searchParams: searchParams{
-			FindQuery: query.Get("query"),
+			FindQuery:     query.Get("query"),
 			FindMatchCase: query.Get("matchcase") == "on",
-			FindRegex: query.Get("regex") == "on",
+			FindRegex:     query.Get("regex") == "on",
 		},
 		sortParams: sortParams{
 			IsDesc: sortDesc,
-			Field: SortBy(sort),
+			Field:  SortBy(sort),
 		},
 	}
 	hasQuery := len(pageData.searchParams.FindQuery) > 0

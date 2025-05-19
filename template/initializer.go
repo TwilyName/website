@@ -8,7 +8,7 @@ import (
 	"net/http"
 	"path/filepath"
 
-	"github.com/Twi1ightSpark1e/website/log"
+	"github.com/TwilyName/website/log"
 	"github.com/samber/lo"
 	"github.com/shurcooL/httpfs/filter"
 	"github.com/shurcooL/httpfs/vfsutil"
@@ -24,14 +24,14 @@ func Initialize() {
 	templates = template.New("")
 
 	counter := 0
-	root := filter.Keep(http.FS(templatesContent), func (path string, fi fs.FileInfo) bool {
+	root := filter.Keep(http.FS(templatesContent), func(path string, fi fs.FileInfo) bool {
 		ok := fi.IsDir() || filepath.Ext(path) == suffix
 		if !ok {
 			log.Stderr().Printf("Invalid file embedded into binary: '%s'", fi.Name())
 		}
 		return ok
 	})
-	err := vfsutil.WalkFiles(root, ".", func (path string, fi fs.FileInfo, r io.ReadSeeker, err error) error {
+	err := vfsutil.WalkFiles(root, ".", func(path string, fi fs.FileInfo, r io.ReadSeeker, err error) error {
 		if err != nil {
 			log.Stderr().Print(err)
 			return nil
@@ -47,7 +47,7 @@ func Initialize() {
 			return nil
 		}
 
-		path = path[:len(path) - len(suffix)]
+		path = path[:len(path)-len(suffix)]
 		_, err = templates.New(path).Parse(string(content))
 		if err != nil {
 			log.Stderr().Print(err)
@@ -70,7 +70,7 @@ func Execute(name string, data interface{}, w io.Writer) error {
 }
 
 func AssertExists(name string) {
-	if !lo.ContainsBy(templates.Templates(), func (tpl *template.Template) bool { return tpl.Name() == name }) {
+	if !lo.ContainsBy(templates.Templates(), func(tpl *template.Template) bool { return tpl.Name() == name }) {
 		log.Stderr().Fatalf("'%s' template is missing!", name)
 	}
 }

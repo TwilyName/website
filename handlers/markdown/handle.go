@@ -4,11 +4,11 @@ import (
 	"html/template"
 	"net/http"
 
-	"github.com/Twi1ightSpark1e/website/config"
-	"github.com/Twi1ightSpark1e/website/handlers/errors"
-	"github.com/Twi1ightSpark1e/website/handlers/util"
-	"github.com/Twi1ightSpark1e/website/log"
-	tpl "github.com/Twi1ightSpark1e/website/template"
+	"github.com/TwilyName/website/config"
+	"github.com/TwilyName/website/handlers/errors"
+	"github.com/TwilyName/website/handlers/util"
+	"github.com/TwilyName/website/log"
+	tpl "github.com/TwilyName/website/template"
 )
 
 type page struct {
@@ -17,11 +17,12 @@ type page struct {
 }
 
 type handler struct {
-	root http.FileSystem
-	path string
+	root     http.FileSystem
+	path     string
 	endpoint config.MarkdownEndpointStruct
-	cache *template.HTML
+	cache    *template.HTML
 }
+
 func CreateHandler(
 	root http.FileSystem,
 	path string,
@@ -55,7 +56,7 @@ func (h *handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 	tpl := page{
 		BreadcrumbData: util.PrepareBreadcrumb(r),
-		Content: *h.cache,
+		Content:        *h.cache,
 	}
 	err := util.MinifyTemplate("markdown", tpl, w)
 	if err != nil {

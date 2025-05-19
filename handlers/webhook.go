@@ -6,10 +6,10 @@ import (
 	"os/exec"
 	"strings"
 
-	"github.com/Twi1ightSpark1e/website/config"
-	"github.com/Twi1ightSpark1e/website/handlers/errors"
-	"github.com/Twi1ightSpark1e/website/handlers/util"
-	"github.com/Twi1ightSpark1e/website/log"
+	"github.com/TwilyName/website/config"
+	"github.com/TwilyName/website/handlers/errors"
+	"github.com/TwilyName/website/handlers/util"
+	"github.com/TwilyName/website/log"
 	"github.com/google/shlex"
 )
 

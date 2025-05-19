@@ -3,8 +3,8 @@ package errors
 import (
 	"net/http"
 
-	"github.com/Twi1ightSpark1e/website/handlers/util"
-	"github.com/Twi1ightSpark1e/website/log"
+	"github.com/TwilyName/website/handlers/util"
+	"github.com/TwilyName/website/log"
 	"github.com/pkg/errors"
 )
 
@@ -31,7 +31,7 @@ func WriteBadRequestError(w http.ResponseWriter, r *http.Request) {
 func WriteError(w http.ResponseWriter, r *http.Request, message error) {
 	tpl := page{
 		BreadcrumbData: util.PrepareBreadcrumb(r),
-		Error: message.Error(),
+		Error:          message.Error(),
 	}
 
 	err := util.MinifyTemplate("error", tpl, w)

@@ -5,13 +5,13 @@ import (
 	"io"
 	"net/http"
 
-	"github.com/Twi1ightSpark1e/website/config"
+	"github.com/TwilyName/website/config"
 )
 
 type InlineMarkdown struct {
 	MarkdownVisibility config.PreviewType
-	MarkdownTitle string
-	MarkdownContent template.HTML
+	MarkdownTitle      string
+	MarkdownContent    template.HTML
 }
 
 func PrepareInline(ptype config.PreviewType, file http.File) InlineMarkdown {

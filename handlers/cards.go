@@ -4,11 +4,11 @@ import (
 	"net"
 	"net/http"
 
-	"github.com/Twi1ightSpark1e/website/config"
-	"github.com/Twi1ightSpark1e/website/handlers/errors"
-	"github.com/Twi1ightSpark1e/website/handlers/util"
-	"github.com/Twi1ightSpark1e/website/log"
-	"github.com/Twi1ightSpark1e/website/template"
+	"github.com/TwilyName/website/config"
+	"github.com/TwilyName/website/handlers/errors"
+	"github.com/TwilyName/website/handlers/util"
+	"github.com/TwilyName/website/log"
+	"github.com/TwilyName/website/template"
 )
 
 type cardsPage struct {
@@ -17,9 +17,10 @@ type cardsPage struct {
 }
 
 type cardsHandler struct {
-	path string
+	path     string
 	endpoint config.CardsEndpointStruct
 }
+
 func CardsHandler(path string, endpoint config.CardsEndpointStruct) http.Handler {
 	template.AssertExists("cards")
 	return &cardsHandler{path, endpoint}
@@ -32,8 +33,8 @@ func (h *cardsHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	tplData := cardsPage {
-		Cards: h.getCards(remoteAddr),
+	tplData := cardsPage{
+		Cards:          h.getCards(remoteAddr),
 		BreadcrumbData: util.PrepareBreadcrumb(r),
 	}
 
@@ -44,7 +45,7 @@ func (h *cardsHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *cardsHandler) getCards(client net.IP) []config.CardStruct {
-	cards := []config.CardStruct {}
+	cards := []config.CardStruct{}
 
 	for _, cardDescr := range h.endpoint.Content {
 		if config.IsAllowedByACL(client, cardDescr.View) {

@@ -10,7 +10,7 @@ import (
 	"net/http"
 	"path/filepath"
 
-	"github.com/Twi1ightSpark1e/website/handlers/util"
+	"github.com/TwilyName/website/handlers/util"
 	"github.com/klauspost/compress/zstd"
 )
 
@@ -47,7 +47,7 @@ func (h *handler) prepareTar(w io.WriteCloser, dir string, clientAddr net.IP, pa
 
 	_, dirname := filepath.Split(filepath.Dir(dir))
 
-	return h.getDirContent(dir, clientAddr, true, params, func (relativepath string, fi fs.FileInfo, err error) error {
+	return h.getDirContent(dir, clientAddr, true, params, func(relativepath string, fi fs.FileInfo, err error) error {
 		if err != nil {
 			return err
 		}

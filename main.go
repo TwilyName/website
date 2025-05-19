@@ -11,19 +11,19 @@ import (
 	"github.com/felixge/httpsnoop"
 	getopt "github.com/pborman/getopt/v2"
 
-	"github.com/Twi1ightSpark1e/website/config"
-	"github.com/Twi1ightSpark1e/website/handlers"
-	"github.com/Twi1ightSpark1e/website/handlers/errors"
-	"github.com/Twi1ightSpark1e/website/handlers/fileindex"
-	"github.com/Twi1ightSpark1e/website/handlers/markdown"
-	"github.com/Twi1ightSpark1e/website/handlers/util"
-	"github.com/Twi1ightSpark1e/website/log"
-	"github.com/Twi1ightSpark1e/website/template"
+	"github.com/TwilyName/website/config"
+	"github.com/TwilyName/website/handlers"
+	"github.com/TwilyName/website/handlers/errors"
+	"github.com/TwilyName/website/handlers/fileindex"
+	"github.com/TwilyName/website/handlers/markdown"
+	"github.com/TwilyName/website/handlers/util"
+	"github.com/TwilyName/website/log"
+	"github.com/TwilyName/website/template"
 )
 
 var (
 	configPath = "config.yaml"
-	showHelp = false
+	showHelp   = false
 )
 
 //go:embed static
