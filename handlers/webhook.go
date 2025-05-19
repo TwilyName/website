@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"io"
-	"io/ioutil"
 	"net/http"
 	"os/exec"
 	"strings"
@@ -15,9 +14,10 @@ import (
 )
 
 type webhookHandler struct {
-	path string
+	path     string
 	endpoint config.WebhookEndpointStruct
 }
+
 func WebhookHandler(path string, endpoint config.WebhookEndpointStruct) http.Handler {
 	return &webhookHandler{path, endpoint}
 }
@@ -34,7 +34,7 @@ func (h *webhookHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if h.endpoint.Method != "" && strings.ToLower(r.Method) != strings.ToLower(h.endpoint.Method) {
+	if h.endpoint.Method != "" && strings.EqualFold(r.Method, h.endpoint.Method) {
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
@@ -58,8 +58,8 @@ func (h *webhookHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	cmd.Stdout = ioutil.Discard
-	cmd.Stderr = ioutil.Discard
+	cmd.Stdout = io.Discard
+	cmd.Stderr = io.Discard
 
 	stdin, err := cmd.StdinPipe()
 	if err != nil {
@@ -86,6 +86,6 @@ func (h *webhookHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		log.Stderr().Printf("Cannot wait for webhook exit: %v", err)
 	}
 
-	/*exitcode :=*/ cmd.ProcessState.ExitCode()
+	cmd.ProcessState.ExitCode()
 	// TODO: debug! h.logger.Access.Printf("Webhook exited with code %d", exitcode)
 }
