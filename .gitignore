@@ -4,3 +4,5 @@ config.yaml
 static/favicon.ico
 static/icon.svg
 static/apple-touch-icon.png
+
+.vscode/
