@@ -2,6 +2,7 @@ package fileindex
 
 import (
 	"archive/tar"
+	"archive/zip"
 	"compress/gzip"
 	"fmt"
 	"io"
@@ -37,6 +38,43 @@ func (h *handler) sendFile(writer http.ResponseWriter, req *http.Request, params
 
 	http.ServeContent(writer, req, stat.Name(), stat.ModTime(), file)
 	return true, nil
+}
+
+func (h *handler) prepareZip(w io.WriteCloser, dir string, clientAddr net.IP, params searchParams) error {
+	defer w.Close()
+
+	zw := zip.NewWriter(w)
+	defer zw.Close()
+
+	_, dirname := filepath.Split(filepath.Dir(dir))
+
+	return h.getDirContent(dir, clientAddr, true, params, func(relativepath string, fi fs.FileInfo, err error) error {
+		if err != nil || fi.IsDir() {
+			return err
+		}
+
+		th, err := zip.FileInfoHeader(fi)
+		if err != nil {
+			return err
+		}
+
+		th.Name = fmt.Sprintf("%s/%s%s", dirname, relativepath, fi.Name())
+
+		var destIo io.Writer
+		if destIo, err = zw.CreateHeader(th); err != nil {
+			return err
+		}
+
+		path := fmt.Sprintf("%s%s%s", dir, relativepath, fi.Name())
+		fh, err := h.root.Open(path)
+		if err != nil {
+			return err
+		}
+		defer fh.Close()
+
+		_, err = io.Copy(destIo, fh)
+		return err
+	})
 }
 
 func (h *handler) prepareTar(w io.WriteCloser, dir string, clientAddr net.IP, params searchParams) error {
@@ -81,6 +119,21 @@ func (h *handler) prepareTar(w io.WriteCloser, dir string, clientAddr net.IP, pa
 		_, err = io.Copy(tw, fh)
 		return err
 	})
+}
+
+func (h *handler) uploadZip(w http.ResponseWriter, r *http.Request, params searchParams) (bool, error) {
+	dir := r.URL.Path[1:]
+	filename := fmt.Sprintf("%s.zip", filepath.Base(r.URL.Path))
+
+	w.Header().Add("Content-Type", "application/zip")
+	w.Header().Add("Content-Disposition", fmt.Sprintf("attachment; filename=\"%s\"", filename))
+
+	bufr, bufw := io.Pipe()
+	defer bufr.Close()
+
+	go h.prepareZip(bufw, dir, util.GetRemoteAddr(r), params)
+	written, err := io.Copy(w, bufr)
+	return written > 0, err
 }
 
 func (h *handler) uploadTar(w http.ResponseWriter, r *http.Request, params searchParams) (bool, error) {

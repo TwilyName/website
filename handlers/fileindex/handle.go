@@ -30,6 +30,7 @@ func CreateHandler(
 
 	h := &handler{root, path, endpoint, map[string]uploader{}}
 	h.uploaders = map[string]uploader{
+		"zip": h.uploadZip,
 		"tar": h.uploadTar,
 		"gz":  h.uploadGz,
 		"zst": h.uploadZst,

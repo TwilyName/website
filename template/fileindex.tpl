@@ -15,6 +15,7 @@
       {{end}}
       <div class="input-group w-auto">
         <span class="input-group-text">Download as:</span>
+        <button type="submit" name="download" value="zip" class="btn btn-subtle">.zip</input>
         <button type="submit" name="download" value="tar" class="btn btn-subtle">.tar</input>
         <button type="submit" name="download" value="gz" class="btn btn-subtle">.tar.gz</input>
         <button type="submit" name="download" value="zst" class="btn btn-subtle">.tar.zst</input>
