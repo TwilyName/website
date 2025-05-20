@@ -8,6 +8,7 @@ import (
 	"io"
 	"net/http"
 	"regexp"
+	"sort"
 	"strings"
 	"time"
 
@@ -168,11 +169,60 @@ func (h *graphvizHandler) performGraphDecoration(g *graphviz.Graphviz, graph *cg
 
 		var err error
 		for node, err := graph.FirstNode(); node != nil && err == nil; node, err = graph.NextNode(node) {
+			name, err := node.Name()
+			if err != nil {
+				continue
+			}
+
+			nodeLabel := strings.ReplaceAll(name, ".", "-")
+			node.SetID(nodeLabel)
+
 			if node.GetStr("style") == "filled" {
 				node.SetFillColor(node.GetStr("color"))
 			} else {
 				node.SetStyle(cgraph.FilledNodeStyle).SetFillColor("#ffffff")
 			}
+
+			var neighbors []string
+			for edge, err := graph.FirstEdge(node); edge != nil && err == nil; edge, err = graph.NextEdge(edge, node) {
+				// TODO: this code will probably make it possible to highlight connected edges when hover on node sometime
+				// class := edge.GetStr("class")
+				// if len(class) == 0 {
+				// 	edge.SafeSet("class", nodeLabel, "")
+				// } else {
+				// 	class = class + " " + nodeLabel
+				// 	edge.Set("class", class)
+				// }
+
+				head, err := edge.Head()
+				if err != nil {
+					continue
+				}
+				headName, err := head.Name()
+				if err != nil {
+					continue
+				}
+				tail, err := edge.Tail()
+				if err != nil {
+					continue
+				}
+				tailName, err := tail.Name()
+				if err != nil {
+					continue
+				}
+
+				if name != headName {
+					neighbors = append(neighbors, headName)
+				} else {
+					neighbors = append(neighbors, tailName)
+				}
+			}
+
+			sort.Slice(neighbors, func(i, j int) bool {
+				return strings.Compare(neighbors[i], neighbors[j]) < 0
+			})
+			tooltip := name + " is directly connected to:\n" + strings.Join(neighbors, ",\n")
+			node.SetTooltip(tooltip)
 		}
 
 		return err

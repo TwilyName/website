@@ -2,6 +2,14 @@
 
 <head>
   {{template "base/head" .}}
+  <style>
+    svg .graph .node:hover ellipse {
+      stroke-width: 4;
+    }
+    svg .graph .edge:hover path {
+      stroke-width: 4;
+    }
+  </style>
 </head>
 
 {{template "base/body" .}}
