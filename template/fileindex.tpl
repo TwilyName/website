@@ -2,7 +2,6 @@
 
 <head>
   {{template "base/head" .}}
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
   <link rel="stylesheet" type="text/css" href="/static/autoindex.css"></link>
 </head>
 
@@ -48,7 +47,7 @@
   <table class="table table-striped table-sm table-hover">
     <thead>
       <tr>
-        <th scope="col">name</th>
+        <th scope="col">name<span class="mx-2 text-body-secondary fw-normal">{{.ListStats}}</span></th>
         <th scope="col">size</th>
         <th scope="col">date</th>
       </tr>

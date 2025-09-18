@@ -3,6 +3,7 @@ package fileindex
 import (
 	"fmt"
 	"net/http"
+	"strings"
 
 	"github.com/TwilyName/website/config"
 	"github.com/TwilyName/website/handlers/errors"
@@ -54,6 +55,7 @@ type page struct {
 	URL             string
 	AllowUpload     bool
 	List            []fileEntry
+	ListStats       string
 }
 
 func (h *handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
@@ -130,6 +132,7 @@ func (h *handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	} else {
 		pageData.List = list
+		pageData.ListStats = generateFileListStats(list)
 
 		show, name := h.showMarkdown(list)
 		ptype := config.PreviewNone
@@ -156,4 +159,34 @@ func (h *handler) preserveGetParams(r *http.Request) []preservedParam {
 		}
 	}
 	return result
+}
+
+func generateFileListStats(list []fileEntry) string {
+	filesCount := 0
+	dirsCount := 0
+	for _, entry := range list {
+		if entry.IsDir {
+			dirsCount += 1
+		} else {
+			filesCount += 1
+		}
+	}
+
+	var stats []string
+	if dirsCount > 0 {
+		if dirsCount == 1 {
+			stats = append(stats, fmt.Sprintf("%d dir", dirsCount))
+		} else {
+			stats = append(stats, fmt.Sprintf("%d dirs", dirsCount))
+		}
+	}
+	if filesCount > 0 {
+		if filesCount == 1 {
+			stats = append(stats, fmt.Sprintf("%d file", filesCount))
+		} else {
+			stats = append(stats, fmt.Sprintf("%d files", filesCount))
+		}
+	}
+
+	return strings.Join(stats, ", ")
 }
