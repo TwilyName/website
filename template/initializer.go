@@ -9,7 +9,6 @@ import (
 	"path/filepath"
 
 	"github.com/TwilyName/website/log"
-	"github.com/samber/lo"
 	"github.com/shurcooL/httpfs/filter"
 	"github.com/shurcooL/httpfs/vfsutil"
 )
@@ -70,7 +69,11 @@ func Execute(name string, data interface{}, w io.Writer) error {
 }
 
 func AssertExists(name string) {
-	if !lo.ContainsBy(templates.Templates(), func(tpl *template.Template) bool { return tpl.Name() == name }) {
-		log.Stderr().Fatalf("'%s' template is missing!", name)
+	for _, tpl := range templates.Templates() {
+		if tpl.Name() == name {
+			return
+		}
 	}
+
+	log.Stderr().Fatalf("'%s' template is missing!", name)
 }

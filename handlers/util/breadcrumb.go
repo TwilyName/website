@@ -4,47 +4,49 @@ import (
 	"fmt"
 	"net/http"
 	"strings"
-
-	"github.com/samber/lo"
 )
 
 type BreadcrumbData struct {
-	Breadcrumb []breadcrumbItem
+	Breadcrumb     []breadcrumbItem
 	LastBreadcrumb string
-	ThemeSwitch Theme
+	ThemeSwitch    Theme
 }
 
 type breadcrumbItem struct {
-	Title string
+	Title   string
 	Address string
 }
 
 func PrepareBreadcrumb(req *http.Request) BreadcrumbData {
-	result := []breadcrumbItem {
+	result := []breadcrumbItem{
 		{
-			Title: req.Host,
+			Title:   req.Host,
 			Address: "/",
 		},
 	}
 
-	items := lo.Filter(strings.Split(req.URL.Path, "/"), func (item string, index int) bool {
-		return len(item) != 0
-	})
+	allItems := strings.Split(req.URL.Path, "/")
+	var items []string
+	for _, item := range allItems {
+		if len(item) != 0 {
+			items = append(items, item)
+		}
+	}
 	for idx, item := range items {
 		if len(item) == 0 {
 			continue
 		}
 
-		address := fmt.Sprintf("/%s/", strings.Join(items[:idx + 1], "/"))
-		result = append(result, breadcrumbItem {
-			Title: item,
+		address := fmt.Sprintf("/%s/", strings.Join(items[:idx+1], "/"))
+		result = append(result, breadcrumbItem{
+			Title:   item,
 			Address: address,
 		})
 	}
 
 	return BreadcrumbData{
-		Breadcrumb: result[:len(result) - 1],
-		LastBreadcrumb: result[len(result) - 1].Title,
-		ThemeSwitch: GetTheme(req),
+		Breadcrumb:     result[:len(result)-1],
+		LastBreadcrumb: result[len(result)-1].Title,
+		ThemeSwitch:    GetTheme(req),
 	}
 }

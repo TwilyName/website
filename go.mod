@@ -13,7 +13,6 @@ require (
 	github.com/klauspost/compress v1.18.0
 	github.com/pborman/getopt/v2 v2.1.0
 	github.com/pkg/errors v0.9.1
-	github.com/samber/lo v1.50.0
 	github.com/shurcooL/httpfs v0.0.0-20230704072500-f1e31cf0ba5c
 	github.com/tdewolff/minify/v2 v2.23.5
 	golang.org/x/crypto v0.38.0
